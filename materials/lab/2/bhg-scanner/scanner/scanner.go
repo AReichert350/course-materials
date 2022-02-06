@@ -38,14 +38,14 @@ func worker(ports, results chan int, targAdd string) {
 // hard: restructuring code - consider modification to class/object 
 // No matter what you do, modify scanner_test.go to align; note the single test currently fails
 func PortScanner(rangeToScan []int, targAdd string) (int, int, map[int]string) {
-	ports := make(chan int, len(rangeToScan)) // TODO 4: TUNE THIS FOR CODEANYWHERE / LOCAL MACHINE
-	results := make(chan int)
-
 	//TODO 3 : ADD closed ports; currently code only tracks open ports
 	// Moved into port scanner so code can be run multiple times with "fresh"
 	// instances of these variables
 	var openports []int  // notice the capitalization here. access limited!
 	var closedports []int
+
+	ports := make(chan int, len(rangeToScan)) // TODO 4: TUNE THIS FOR CODEANYWHERE / LOCAL MACHINE
+	results := make(chan int)
 
 	for i := 0; i < cap(ports); i++ {
 		go worker(ports, results, targAdd)
