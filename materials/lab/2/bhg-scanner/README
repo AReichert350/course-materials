@@ -1,14 +1,14 @@
-**What the code does:**
+What the code does:
 - Scans ports in a specified range of a specified address and for each port prints whether it is open or closed. Defaults are ports 1-1024 for the address "scanme.nmap.org".
 
-**Modification to the code:**
+Modification to the code:
 - Uses DialTimeout to only spend 1 second to attempt to connect to each port (TODO 2)
 - Reports which ports are closed (TODO 3)
 - Is somewhat-optimized with a nice number of parallel threads (TODO 4)
 - Output is in csv format (TODO 5)
 - Returns the number of closed ports and the number of open ports (TODO 6)
 
-**Details of #5 extension:**
+Details of #5 extension:
 - Can pass in a slice of port numbers which will all be scanned
 - Can pass in a specific address to scan the ports of
 - Returns a map of the format map[port-number]open-or-closed for each of the scanned ports
