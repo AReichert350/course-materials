@@ -47,38 +47,48 @@ func GetAssignments(w http.ResponseWriter, r *http.Request) {
 	response.Assignments = Assignments
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	
-	jsonResponse, err := json.Marshal(response)
+
+	var jsonResponse []byte
+	var err error
+
+	if len(response.Assignments) == 0 {
+		jsonResponse, err = json.Marshal("Yay! Looks like you currently don't have any assignments")
+	} else {
+		jsonResponse, err = json.Marshal(response)
+	}
 
 	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	//TODO 
 	w.Write(jsonResponse)
+	w.WriteHeader(http.StatusOK)
 }
 
 func GetAssignment(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Entering %s end point", r.URL.Path)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 	params := mux.Vars(r)
 
 	for _, assignment := range Assignments {
 		if assignment.Id == params["id"]{
 			json.NewEncoder(w).Encode(assignment)
-			break
+			w.WriteHeader(http.StatusOK)
+			return
 		}
 	}
 	//TODO : Provide a response if there is no such assignment
-	//w.Write(jsonResponse)
+	// If reached this point, there is no such assignment
+	jsonResponse, _ := json.Marshal("No assignment exists for the requested ID (" + params["id"] + ")")
+	w.WriteHeader(http.StatusNotFound)
+	w.Write(jsonResponse)
 }
 
 func DeleteAssignment(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Entering %s DELETE end point", r.URL.Path)
 	w.Header().Set("Content-Type", "application/txt")
-	w.WriteHeader(http.StatusOK)
 	params := mux.Vars(r)
 	
 	response := make(map[string]string)
@@ -94,9 +104,11 @@ func DeleteAssignment(w http.ResponseWriter, r *http.Request) {
 		
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	w.Write(jsonResponse)
+	w.WriteHeader(http.StatusOK)
 }
 
 func UpdateAssignment(w http.ResponseWriter, r *http.Request) {
@@ -106,13 +118,15 @@ func UpdateAssignment(w http.ResponseWriter, r *http.Request) {
 	var response Response
 	response.Assignments = Assignments
 
+	params := mux.Vars(r)
+
 	updatedAssignmentIndex := -1
 
 	// Lookup index in Assignments user passed for assignment they want to update
 	r.ParseForm()
 	if(r.FormValue("id") != "") {
 		for i, assignment := range response.Assignments {
-			if assignment.Id == r.FormValue("id") {
+			if assignment.Id == params["id"] {
 				updatedAssignmentIndex = i
 				break
 			}
@@ -123,6 +137,8 @@ func UpdateAssignment(w http.ResponseWriter, r *http.Request) {
 	// return that the assignment wasn't found
 	if updatedAssignmentIndex == -1 {
 		w.WriteHeader(http.StatusNotFound)
+		jsonResponse, _ := json.Marshal("No assignment exists for the requested ID (" + params["id"] + ")")
+		w.Write(jsonResponse)
 		return
 	}
 
@@ -131,11 +147,12 @@ func UpdateAssignment(w http.ResponseWriter, r *http.Request) {
 	Assignments[updatedAssignmentIndex].Description = r.FormValue("desc")
 	Assignments[updatedAssignmentIndex].Points, _ = strconv.Atoi(r.FormValue("points"))
 	response.Assignments = Assignments
-	w.WriteHeader(http.StatusOK)
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
 }
 
@@ -145,14 +162,21 @@ func CreateAssignment(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	// Possible TODO: Better Error Checking!
 	// Possible TODO: Better Logging
-	if(r.FormValue("id") != ""){
+	if(r.FormValue("id")    !=  "" && 
+	   r.FormValue("title") !=  "" &&
+	   r.FormValue("desc")  !=  "" &&
+	   r.FormValue("points") != "") {
 		assignmnet.Id =  r.FormValue("id")
 		assignmnet.Title =  r.FormValue("title")
 		assignmnet.Description =  r.FormValue("desc")
 		assignmnet.Points, _ =  strconv.Atoi(r.FormValue("points"))
 		Assignments = append(Assignments, assignmnet)
+		jsonResponse, _ := json.Marshal("Created the assignment!")
+		w.Write(jsonResponse)
 		w.WriteHeader(http.StatusCreated)
+		return
 	}
+	jsonResponse, _ := json.Marshal("Missing value(s) in request body for id, title, desc, or points")
+	w.Write(jsonResponse)
 	w.WriteHeader(http.StatusNotFound)
-
 }
