@@ -106,8 +106,37 @@ func UpdateAssignment(w http.ResponseWriter, r *http.Request) {
 	var response Response
 	response.Assignments = Assignments
 
+	updatedAssignmentIndex := -1
 
+	// Lookup index in Assignments user passed for assignment they want to update
+	r.ParseForm()
+	if(r.FormValue("id") != "") {
+		for i, assignment := range response.Assignments {
+			if assignment.Id == r.FormValue("id") {
+				updatedAssignmentIndex = i
+				break
+			}
+		}
+	}
 
+	// If the assignment index to update was not a pre-existing assignment index,
+	// return that the assignment wasn't found
+	if updatedAssignmentIndex == -1 {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	// Update the actual Assignment class variable
+	Assignments[updatedAssignmentIndex].Title = r.FormValue("title")
+	Assignments[updatedAssignmentIndex].Description = r.FormValue("desc")
+	Assignments[updatedAssignmentIndex].Points, _ = strconv.Atoi(r.FormValue("points"))
+	response.Assignments = Assignments
+	w.WriteHeader(http.StatusOK)
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		return
+	}
+	w.Write(jsonResponse)
 }
 
 func CreateAssignment(w http.ResponseWriter, r *http.Request) {
