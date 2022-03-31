@@ -13,13 +13,19 @@ import (
 //TODO_1: When LOG_LEVEL = 0 DO NOT LOG anything
 //TODO_1: When LOG_LEVEL = 1 LOG API details only 
 //TODO_1: When LOG_LEVEL = 2 LOG API details and file matches (e.g., everything)
+var LOG_LEVEL int = 1
 
 func main() {
-	
-	log.Println("starting API server")
+	scrape.SetLogLevel(LOG_LEVEL)
+
+	if(LOG_LEVEL == 1 || LOG_LEVEL == 2) {
+		log.Println("starting API server")
+	}
 	//create a new router
 	router := mux.NewRouter()
-	log.Println("creating routes")
+	if(LOG_LEVEL == 1 || LOG_LEVEL == 2) {
+		log.Println("creating routes")
+	}
 	//specify endpoints
 	router.HandleFunc("/", scrape.MainPage).Methods("GET")
 
@@ -27,9 +33,12 @@ func main() {
 
 	router.HandleFunc("/indexer", scrape.IndexFiles).Methods("GET")
 	router.HandleFunc("/search", scrape.FindFile).Methods("GET")		
-    //TODO_2 router.HandleFunc("/addsearch/{regex}", scrape.TODOREPLACE).Methods("GET")
-    //TODO_3 router.HandleFunc("/clear", scrape.TODOREPLACE).Methods("GET")
-    //TODO_4 router.HandleFunc("/reset", scrape.TODOREPLACE).Methods("GET")
+    //TODO_2 
+	router.HandleFunc("/addsearch/{regex}", scrape.AddRegEx).Methods("GET")
+    //TODO_3 
+	router.HandleFunc("/clear", scrape.Clear).Methods("GET")
+    //TODO_4 
+	router.HandleFunc("/reset", scrape.ResetArray).Methods("GET")
 
 
 

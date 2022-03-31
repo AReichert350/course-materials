@@ -8,6 +8,11 @@ import (
 	"regexp"
 )
 
+// Added for TODO 1
+var LOG_LEVEL int
+func SetLogLevel(log_level int) {
+	LOG_LEVEL = log_level
+}
 
 //==========================================================================\\
 // || GLOBAL DATA STRUCTURES  ||
@@ -19,8 +24,6 @@ type FileInfo struct {
 	Location string `json:"location"`
 }
 var Files []FileInfo
-
-
 
 var regexes = []*regexp.Regexp{
 	regexp.MustCompile(`(?i)password`),
@@ -43,6 +46,10 @@ func resetRegEx(){
 
 func clearRegEx(){
      //TODO_15 - Validate that this works as expected and doesn't cause issues
+	// Before calling:
+	//   { "status" : "API is up and running ", "regexs" :["(?i)password","(?i).txt"] }
+	// After calling:
+	//   { "status" : "API is up and running ", "regexs" :null }
     regexes = nil
 }
 
