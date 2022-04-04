@@ -71,7 +71,7 @@ func GenHashMaps(filename string) {
     md5lookup = make(map[string]string)
 
 	// Without goroutines
-	// fmt.Print("Generating hash maps without using goroutines")
+	// fmt.Print("Generating hash maps without using goroutines\n")
 	// for scanner.Scan() {
 	// 	password := scanner.Text()
 	// 	// Hash to MD5 and save
@@ -112,11 +112,11 @@ func GenHashMaps(filename string) {
 	//TODO create a test in hscan_test.go so that you can time the performance of your implementation
 	//Test and record the time it takes to scan to generate these Maps
 	// 1. With and without using go subroutines
-		// For Top304Thousand-probable-v2.txt, it takes 1.212 seconds to generate the maps without goroutines and
-        // 5.012 seconds to generate the maps using goroutines.
+		// For Top304Thousand-probable-v2.txt, it takes 1.168 seconds to generate the maps without goroutines and
+        // 5.087 seconds to generate the maps using goroutines.
 	// 2. Compute the time per password (hint the number of passwords for each file is listed on the site...)
-		// For Top304Thousand-probable-v2.txt, it takes 3.99E-6 seconds per password when not using goroutines and
-		// 1.65E-5 seconds per password when using goroutines.
+		// For Top304Thousand-probable-v2.txt, it takes 3.84E-6 seconds per password when not using goroutines and
+		// 1.67E-5 seconds per password when using goroutines.
 }
 
 func GetSHA(hash string) (string, error) {
