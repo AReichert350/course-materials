@@ -1,3 +1,4 @@
+// Codeanywhere:
 // sudo apt-get install mongodb
 // go mod init ch7.go
 // go mod tidy
@@ -9,8 +10,15 @@
 
 // To connect:
 // mongo
+
+// Docker:
+// docker run --name some-mongo -p 27017:27017 mongo
+// docker ps
+// docker run -it --link some-mongo:mongo --rm mongo sh -c 'exec mongo "$MONGO_PORT_27017_TCP_ADDR:$MONGO_PORT_27017_TCP_PORT/store"'
+
 // > db.transactions.insert([ {"name1" : "value1"} ])
 // > db.transactions.find( {} )
+// > db.transactions.remove( {} )
 
 // go get gopkg.in/mgo.v2
 
@@ -19,6 +27,9 @@
 // - Unlike traditional SQL databases, MongoDB is schema-less, meaning it doesn't
 //   follow a predefined, rigid rule system for organizing table data.
 
+// For this file:
+// go build main.go
+// ./main
 package main
 
 import (
@@ -41,8 +52,6 @@ func main() {
 	session, err := mgo.Dial("127.0.0.1")
 	if err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println(session)
 	}
 	defer session.Close()
 
