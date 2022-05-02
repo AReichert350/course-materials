@@ -2,6 +2,8 @@
 // go build main.go
 // ./main 127.0.0.1
 
+// https://golangbyexample.com/functoin-different-package-go/#:~:text=The%20function%20in%20another%20package,first%20which%20contains%20that%20function.
+
 package main
 
 import (
