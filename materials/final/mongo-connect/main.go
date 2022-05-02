@@ -19,6 +19,7 @@
 // > db.transactions.insert([ {"name1" : "value1"} ])
 // > db.transactions.find( {} )
 // > db.transactions.remove( {} )
+// > show dbs
 
 // go get gopkg.in/mgo.v2
 
