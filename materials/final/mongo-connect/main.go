@@ -34,11 +34,13 @@ package main
 
 import (
 	"fmt"
-	// "log"
+	"log"
 
 	mgo "gopkg.in/mgo.v2"
 )
 
+// Transaction is a type to represent a single document
+// from the store table
 // bson is binary JSON
 type Transaction struct {
 	CCNum      string  `bson:"ccnum"`
@@ -49,15 +51,19 @@ type Transaction struct {
 }
 
 func main() {
+	// mgo.Dial() creates a session by establishing a connection to a DB
 	session, err := mgo.Dial("127.0.0.1")
 	if err != nil {
-		fmt.Println(err)
+		log.Panicln(err)
 	}
 	defer session.Close()
 
 	results := make([]Transaction, 0)
+	// Use session to query the store DB (get all the records from the transactions table).
+	// The structure tags defined in the Transaction type above are used to "unmarshal the"
+	// binary JSON" into the defined Transaction type.
 	if err := session.DB("store").C("transactions").Find(nil).All(&results); err != nil {
-		fmt.Println(err)
+		log.Panicln(err)
 	}
 	for _, txn := range results {
 		fmt.Println(txn.CCNum, txn.Date, txn.Amount, txn.Cvv, txn.Expiration)

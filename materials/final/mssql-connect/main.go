@@ -24,3 +24,52 @@
 // go
 // select * from transactions;
 // go
+
+// go get github.com/denisenkom/go-mssqldb
+
+// For this file:
+// go build main.go
+// ./main
+
+package main
+
+import (
+	"database/sql"
+	"fmt"
+	"log"
+
+	_ "github.com/denisenkom/go-mssqldb"
+)
+
+func main() {
+	// Establish a connection to the DB with sql.Open()
+	// First param: which driver to use
+	// Second param: connection string
+
+	db, err := sql.Open("sqlserver", "sqlserver://sa:4010goBHG!@127.0.0.1:1433?database=store")
+	if err != nil {
+		log.Panicln(err)
+	}
+	defer db.Close()
+
+	var (
+		ccnum, date, cvv, amount, exp string
+	)
+	// Pass a MSSQL statement to db.Query()
+	rows, err := db.Query("SELECT ccnum, date, amount, cvv, exp FROM transactions")
+	if err != nil {
+		log.Panicln(err)
+	}
+	defer rows.Close()
+	// Loop through all the rows returned by db.Query()
+	for rows.Next() {
+		err := rows.Scan(&ccnum, &date, &amount, &cvv, &exp)
+		if err != nil {
+			log.Panicln(err)
+		}
+		fmt.Println(ccnum, date, amount, cvv, exp)
+	}
+	if rows.Err() != nil {
+		log.Panicln(err)
+	}
+}

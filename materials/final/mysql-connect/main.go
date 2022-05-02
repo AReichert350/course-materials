@@ -45,6 +45,9 @@ import (
 )
 
 func main() {
+	// Establish a connection to the DB with sql.Open()
+	// First param: which driver to use
+	// Second param: connection string
 	db, err := sql.Open("mysql", "root:password@tcp(127.0.0.1:3306)/store")
 	if err != nil {
 		log.Panicln(err)
@@ -55,11 +58,13 @@ func main() {
 		ccnum, date, cvv, exp string
 		amount                float32
 	)
+	// Pass a SQL statement to db.Query()
 	rows, err := db.Query("SELECT ccnum, date, amount, cvv, exp FROM transactions")
 	if err != nil {
 		log.Panicln(err)
 	}
 	defer rows.Close()
+	// Loop through all the rows returned by db.Query()
 	for rows.Next() {
 		err := rows.Scan(&ccnum, &date, &amount, &cvv, &exp)
 		if err != nil {
