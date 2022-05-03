@@ -15,6 +15,7 @@
 // docker run -it --rm --link some-postgres:postgres postgres psql -h postgres -U postgres
 
 // create database store;
+// \list
 // \connect store
 // create table transactions(ccnum varchar(32), date date, amount money, cvv char(4), exp date);
 // insert into transactions(colName) values ('value');
