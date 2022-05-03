@@ -15,6 +15,8 @@
 
 // create database store;
 // go
+// select name from sys.databases;
+// go
 // use store;
 // create table transactions(ccnum varchar(32), date date, amount decimal(7,2), cvv char(4), exp date);
 // go
