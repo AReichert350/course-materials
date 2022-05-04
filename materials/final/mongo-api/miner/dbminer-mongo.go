@@ -90,7 +90,7 @@ func (m *MongoMiner) GetSchema() (*Schema, error) {
 }
 
 // Expects the IP address of a MongoDB instance as an argument
-func Main(ip_addr string) []string {
+func MongoMain(ip_addr string) []string {
 	mm, err := New(ip_addr)
 	if err != nil {
 		panic(err)

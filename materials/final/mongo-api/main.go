@@ -25,7 +25,7 @@ func main() {
 
 	router.HandleFunc("/api-status", miner.ApiStatus).Methods("GET")
 
-	router.HandleFunc("/mine/{ip_addr}", miner.Mine).Methods("GET")
+	router.HandleFunc("/mongo-mine/{ip_addr}", miner.MongoMine).Methods("GET")
 
 	// router.HandleFunc("/addsearch/{regex}", miner.AddRegEx).Methods("GET")
 	// router.HandleFunc("/clear", miner.Clear).Methods("GET")
