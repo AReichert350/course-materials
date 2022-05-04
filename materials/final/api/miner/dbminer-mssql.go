@@ -12,13 +12,13 @@ import (
 	_ "github.com/denisenkom/go-mssqldb"
 )
 
-type PostgresMiner struct {
+type MSSQLMiner struct {
 	Host string
 	Db   sql.DB
 }
 
-func MSSQLNew(host string) (*PostgresMiner, error) {
-	m := PostgresMiner{Host: host}
+func MSSQLNew(host string) (*MSSQLMiner, error) {
+	m := MSSQLMiner{Host: host}
 	err := m.connect()
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func MSSQLNew(host string) (*PostgresMiner, error) {
 	return &m, nil
 }
 
-func (m *PostgresMiner) connect() error {
+func (m *MSSQLMiner) connect() error {
 	// Connect to the overall mssql instance
 	db, err := sql.Open("sqlserver", fmt.Sprintf("sqlserver://sa:4010goBHG!@%s:1433", m.Host))
 	if err != nil {
@@ -36,7 +36,7 @@ func (m *PostgresMiner) connect() error {
 	return nil
 }
 
-func (m *PostgresMiner) GetSchema() (*Schema, error) {
+func (m *MSSQLMiner) GetSchema() (*Schema, error) {
 	var s = new(Schema)
 
 	// Get the names of all the DBs at the IP address given

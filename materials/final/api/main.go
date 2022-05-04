@@ -29,6 +29,8 @@ func main() {
 
 	router.HandleFunc("/mysql-mine/{ip_addr}", miner.MySQLMine).Methods("GET")
 
+	router.HandleFunc("/postgres-mine/{ip_addr}", miner.PostgresMine).Methods("GET")
+
 	router.HandleFunc("/mssql-mine/{ip_addr}", miner.MSSQLMine).Methods("GET")
 
 	// router.HandleFunc("/addsearch/{regex}", miner.AddRegEx).Methods("GET")

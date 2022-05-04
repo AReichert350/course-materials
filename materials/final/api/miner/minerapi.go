@@ -26,6 +26,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	mainPageHTML += "<button onClick=\"routeToMongoMine()\">Query the local MongoDB (at ip_addr 127.0.0.1)</button>"
 	mainPageHTML += "<li>/mysql-mine/{ip_addr}: Search a MySQL database at an ip address you provide <br>"
 	mainPageHTML += "<button onClick=\"routeToMySQLMine()\">Query the local MySQL DB (at ip_addr 127.0.0.1)</button>"
+	mainPageHTML += "<li>/postgres-mine/{ip_addr}: Search a Postgres database at an ip address you provide <br>"
+	mainPageHTML += "<button onClick=\"routeToPostgresMine()\">Query the local Postgres DB (at ip_addr 127.0.0.1)</button>"
 	mainPageHTML += "<li>/mssql-mine/{ip_addr}: Search a MSSQL database at an ip address you provide <br>"
 	mainPageHTML += "<button onClick=\"routeToMSSQLMine()\">Query the local MSSQL DB (at ip_addr 127.0.0.1)</button>"
 	mainPageHTML += "</li></ul>"
@@ -36,6 +38,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	mainPageHTML += "window.location.href = '/mongo-mine/127.0.0.1'; }"
 	mainPageHTML += "function routeToMySQLMine() {"
 	mainPageHTML += "window.location.href = '/mysql-mine/127.0.0.1'; }"
+	mainPageHTML += "function routeToPostgresMine() {"
+	mainPageHTML += "window.location.href = '/postgres-mine/127.0.0.1'; }"
 	mainPageHTML += "function routeToMSSQLMine() {"
 	mainPageHTML += "window.location.href = '/mssql-mine/127.0.0.1'; }"
 	mainPageHTML += "</script>"
@@ -114,6 +118,37 @@ func MySQLMine(w http.ResponseWriter, r *http.Request) {
 	mainPageHTML += "</script>"
 
 	mainPageHTML += "<H1>The results for mining the MySQL DB at ip address " + ip_addr + ":</H1>"
+	for _, resultLine := range mineResults {
+		mainPageHTML += "<p>" + resultLine + "</p>"
+	}
+
+	mainPageHTML += "</body></html>"
+	fmt.Fprintf(w, mainPageHTML)
+}
+
+func PostgresMine(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Entering %s end point", r.URL.Path)
+
+	params := mux.Vars(r)
+	ip_addr := params["ip_addr"]
+
+	mineResults := PostgresMain(ip_addr)
+
+	for _, resultLine := range mineResults {
+		log.Printf(resultLine)
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+
+	w.WriteHeader(http.StatusOK)
+	mainPageHTML := "<html><body>"
+	mainPageHTML += "<button onClick=\"routeToHome()\">Return Home</button>"
+	mainPageHTML += "<script>"
+	mainPageHTML += "function routeToHome() {"
+	mainPageHTML += "window.location.href = '/'; }"
+	mainPageHTML += "</script>"
+
+	mainPageHTML += "<H1>The results for mining the Postgres DB at ip address " + ip_addr + ":</H1>"
 	for _, resultLine := range mineResults {
 		mainPageHTML += "<p>" + resultLine + "</p>"
 	}
