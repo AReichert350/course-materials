@@ -92,34 +92,34 @@ func MongoMine(w http.ResponseWriter, r *http.Request) {
 }
 
 func MySQLMine(w http.ResponseWriter, r *http.Request) {
-	// log.Printf("Entering %s end point", r.URL.Path)
+	log.Printf("Entering %s end point", r.URL.Path)
 
-	// params := mux.Vars(r)
-	// ip_addr := params["ip_addr"]
+	params := mux.Vars(r)
+	ip_addr := params["ip_addr"]
 
-	// mineResults := MySQLMain(ip_addr)
+	mineResults := MySQLMain(ip_addr)
 
-	// for _, resultLine := range mineResults {
-	// 	log.Printf(resultLine)
-	// }
+	for _, resultLine := range mineResults {
+		log.Printf(resultLine)
+	}
 
-	// w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("Content-Type", "text/html")
 
-	// w.WriteHeader(http.StatusOK)
-	// mainPageHTML := "<html><body>"
-	// mainPageHTML += "<button onClick=\"routeToHome()\">Return Home</button>"
-	// mainPageHTML += "<script>"
-	// mainPageHTML += "function routeToHome() {"
-	// mainPageHTML += "window.location.href = '/'; }"
-	// mainPageHTML += "</script>"
+	w.WriteHeader(http.StatusOK)
+	mainPageHTML := "<html><body>"
+	mainPageHTML += "<button onClick=\"routeToHome()\">Return Home</button>"
+	mainPageHTML += "<script>"
+	mainPageHTML += "function routeToHome() {"
+	mainPageHTML += "window.location.href = '/'; }"
+	mainPageHTML += "</script>"
 
-	// mainPageHTML += "<H1>The results for mining the MySQL DB at ip address " + ip_addr + ":</H1>"
-	// for _, resultLine := range mineResults {
-	// 	mainPageHTML += "<p>" + resultLine + "</p>"
-	// }
+	mainPageHTML += "<H1>The results for mining the MySQL DB at ip address " + ip_addr + ":</H1>"
+	for _, resultLine := range mineResults {
+		mainPageHTML += "<p>" + resultLine + "</p>"
+	}
 
-	// mainPageHTML += "</body></html>"
-	// fmt.Fprintf(w, mainPageHTML)
+	mainPageHTML += "</body></html>"
+	fmt.Fprintf(w, mainPageHTML)
 }
 
 func MSSQLMine(w http.ResponseWriter, r *http.Request) {

@@ -60,7 +60,7 @@ func (m *PostgresMiner) GetSchema() (*Schema, error) {
 		if err != nil {
 			log.Panicln(err)
 		}
-		log.Println("Building schema for DB " + name)
+		// log.Println("Building schema for DB " + name)
 		// Connect to the DB
 		dbConn, err := sql.Open("sqlserver", fmt.Sprintf("sqlserver://sa:4010goBHG!@%s:1433?database=%s", m.Host, name))
 		if err != nil {
@@ -92,7 +92,7 @@ func (m *PostgresMiner) GetSchema() (*Schema, error) {
 				return nil, err
 			}
 			table = Table{Name: currtable, Columns: []string{}}
-			log.Println("collecting col names for table " + currtable)
+			// log.Println("collecting col names for table " + currtable)
 
 			// Get the table's columns
 			// https://www.mytecbits.com/microsoft/sql-server/list-of-column-names
@@ -110,7 +110,7 @@ func (m *PostgresMiner) GetSchema() (*Schema, error) {
 				if err := cols.Scan(&currcol); err != nil {
 					return nil, err
 				}
-				log.Println("found col name " + currcol)
+				// log.Println("found col name " + currcol)
 				table.Columns = append(table.Columns, currcol)
 			}
 			db.Tables = append(db.Tables, table)
